@@ -19,8 +19,8 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: python-3.14-docs-pdf-a4.zip
-          path: ./Doc/dist/python-3.14-docs-pdf-a4.zip
+          path: ./Doc/dist/python-3.14.0rc3-docs-pdf-a4.zip
       - uses: actions/upload-artifact@master
         with:
           name: python-3.14-docs-pdf-a4.tar.bz2
-          path: ./Doc/dist/python-3.14-docs-pdf-a4.tar.bz2
+          path: ./Doc/dist/python-3.14.0rc3-docs-pdf-a4.tar.bz2
