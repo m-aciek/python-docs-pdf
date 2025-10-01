@@ -18,9 +18,11 @@ jobs:
           echo "    'title': 'Generating file'," >> conf.py
           echo "    'body': 'File is being <a href=\"https://github.com/m-aciek/python-docs-pdf/actions/runs/${{ github.run_id }}\">generated</a>.'" >> conf.py
           echo "}" >> conf.py
-          echo "notfound_urls_prefix = 'https://docs.python.org/3/'" >> conf.py
         working-directory: ./Doc
       - run: make html
+        working-directory: ./Doc
+      - run: |
+          sed -i 's|/en/latest/|https://docs.python.org/3/|g' ./build/html/404.html
         working-directory: ./Doc
       - uses: actions/upload-artifact@master
         with:
