@@ -1,0 +1,23 @@
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@master
+        with:
+          python-version: 3
+      - uses: actions/checkout@master
+        with:
+          repository: python/cpython
+          ref: 3.14
+      - run: make venv
+        working-directory: ./Doc
+      - run: make latex
+        working-directory: ./Doc
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y latexmk texlive-xetex fonts-freefont-otf xindy
+      - run: make
+        working-directory: ./Doc/build/latex
+      - uses: actions/upload-artifact@master
+        with:
+          path: ./Doc/build/latex/
