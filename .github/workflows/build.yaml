@@ -16,7 +16,7 @@ jobs:
           echo "" >> conf.py
           echo "notfound_context = {" >> conf.py
           echo "    'title': 'Generating file'," >> conf.py
-          echo "    'body': 'File is being <a href=\"https://github.com/m-aciek/python-docs-pdf/actions/runs/${{ github.run_id }}\">generated</a>.'" >> conf.py
+          echo "    'body': '<h1>Generating file</h1>File is being <a href=\"https://github.com/m-aciek/python-docs-pdf/actions/runs/${{ github.run_id }}\">generated</a>. It should be available soon.'" >> conf.py
           echo "}" >> conf.py
         working-directory: ./Doc
       - run: make html
