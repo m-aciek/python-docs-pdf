@@ -12,12 +12,15 @@ jobs:
           ref: 3.14
       - run: make venv
         working-directory: ./Doc
-      - run: make latex
-        working-directory: ./Doc
       - run: sudo apt-get update
       - run: sudo apt-get install -y latexmk texlive-xetex fonts-freefont-otf xindy
-      - run: make
-        working-directory: ./Doc/build/latex
+      - run: make dist-pdf
+        working-directory: ./Doc
       - uses: actions/upload-artifact@master
         with:
-          path: ./Doc/build/latex/
+          name: python-3.14-docs-pdf-a4.zip
+          path: ./Doc/dist/python-3.14-docs-pdf-a4.zip
+      - uses: actions/upload-artifact@master
+        with:
+          name: python-3.14-docs-pdf-a4.tar.bz2
+          path: ./Doc/dist/python-3.14-docs-pdf-a4.tar.bz2
