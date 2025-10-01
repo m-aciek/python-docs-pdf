@@ -1,5 +1,25 @@
 on: workflow_dispatch
 jobs:
+  inform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@master
+        with:
+          python-version: 3
+      - uses: actions/checkout@master
+        with:
+          repository: python/cpython
+          ref: 3.14
+      - run: make venv
+        working-directory: ./Doc
+      - run: |
+          echo "\nnotfound_context = {\n    'title': 'Generating file',\n    'body': 'File is being <a href='https://github.com/m-aciek/python-docs-pdf/actions/runs/${{ github.run_id }}'>generated</a>.'\n}\nnotfound_urls_prefix = 'https://docs.python.org/3/'" >> conf.py
+        working-directory: ./Doc
+      - run: make html
+        working-directory: ./Doc
+      - uses: actions/upload-artifact@master
+        with:
+          path: ./Doc/build/html/404.html
   build:
     runs-on: ubuntu-latest
     steps:
