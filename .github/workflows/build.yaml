@@ -116,12 +116,12 @@ jobs:
           GITHUB_EVENT_INPUTS_TAG: ${{ github.event.inputs.tag }}
       - uses: actions/upload-artifact@master
         with:
-          name: python-${{ steps.tag-no-v.outputs.tag_no_v }}-docs-pdf-a4.zip
-          path: ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.zip
+          name: ${{ github.event.inputs.tag }}-docs-pdf-a4.zip
+          path: ./Doc/dist/python-${{ steps.tag-no-v.outputs.tag_no_v }}-docs-pdf-a4.zip
       - uses: actions/upload-artifact@master
         with:
-          name: python-${{ steps.tag-no-v.outputs.tag_no_v }}-docs-pdf-a4.tar.bz2
-          path: ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2
+          name: ${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2
+          path: ./Doc/dist/python-${{ steps.tag-no-v.outputs.tag_no_v }}-docs-pdf-a4.tar.bz2
       - name: Checkout gh-pages branch
         uses: actions/checkout@v4
         with:
@@ -137,8 +137,8 @@ jobs:
       - name: Copy generated archives to gh-pages
         run: |
           mkdir -p gh-pages/3
-          cp ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.zip gh-pages/3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.zip
-          cp ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2 gh-pages/3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.tar.bz2
+          cp ./Doc/dist/python-${{ steps.tag-no-v.outputs.tag_no_v }}-docs-pdf-a4.zip gh-pages/3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.zip
+          cp ./Doc/dist/python-${{ steps.tag-no-v.outputs.tag_no_v }}}-docs-pdf-a4.tar.bz2 gh-pages/3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.tar.bz2
       - name: Commit generated archives
         run: |
           cd gh-pages
