@@ -73,9 +73,9 @@ jobs:
         working-directory: ./Doc
       - uses: actions/upload-artifact@master
         with:
-          name: python-${{ github.event.inputs.tag }}-docs-pdf-a4.zip
-          path: ./Doc/dist/python-${{ github.event.inputs.tag }}-docs-pdf-a4.zip
+          name: python-${{ replace(github.event.inputs.tag, 'v', '') }}-docs-pdf-a4.zip
+          path: ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.zip
       - uses: actions/upload-artifact@master
         with:
-          name: python-${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2
-          path: ./Doc/dist/python-${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2
+          name: python-${{ replace(github.event.inputs.tag, 'v', '')  }}-docs-pdf-a4.tar.bz2
+          path: ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2
