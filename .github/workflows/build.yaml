@@ -71,11 +71,17 @@ jobs:
       - run: sudo apt-get install -y latexmk texlive-xetex fonts-freefont-otf xindy
       - run: make dist-pdf
         working-directory: ./Doc
+      - name: Strip leading v from tag
+        id: tag-no-v
+        run: |
+          echo "tag_no_v=${GITHUB_EVENT_INPUTS_TAG#v}" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_EVENT_INPUTS_TAG: ${{ github.event.inputs.tag }}
       - uses: actions/upload-artifact@master
         with:
-          name: python-${{ replace(github.event.inputs.tag, 'v', '') }}-docs-pdf-a4.zip
+          name: python-${{ steps.tag-no-v.outputs.tag_no_v }}-docs-pdf-a4.zip
           path: ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.zip
       - uses: actions/upload-artifact@master
         with:
-          name: python-${{ replace(github.event.inputs.tag, 'v', '')  }}-docs-pdf-a4.tar.bz2
+          name: python-${{ steps.tag-no-v.outputs.tag_no_v }}-docs-pdf-a4.tar.bz2
           path: ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2
