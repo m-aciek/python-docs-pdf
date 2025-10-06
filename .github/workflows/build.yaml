@@ -1,4 +1,10 @@
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag from CPython repository'
+        required: true
+        default: 'v3.13.7'
 jobs:
   inform:
     runs-on: ubuntu-latest
@@ -9,7 +15,7 @@ jobs:
       - uses: actions/checkout@master
         with:
           repository: python/cpython
-          ref: 3.14
+          ref: ${{ github.event.inputs.tag }}
       - run: make venv
         working-directory: ./Doc
       - run: |
@@ -36,7 +42,7 @@ jobs:
       - uses: actions/checkout@master
         with:
           repository: python/cpython
-          ref: 3.14
+          ref: ${{ github.event.inputs.tag }}
       - run: make venv
         working-directory: ./Doc
       - run: sudo apt-get update
@@ -45,9 +51,9 @@ jobs:
         working-directory: ./Doc
       - uses: actions/upload-artifact@master
         with:
-          name: python-3.14-docs-pdf-a4.zip
-          path: ./Doc/dist/python-3.14.0rc3-docs-pdf-a4.zip
+          name: python-${{ github.event.inputs.tag }}-docs-pdf-a4.zip
+          path: ./Doc/dist/python-${{ github.event.inputs.tag }}-docs-pdf-a4.zip
       - uses: actions/upload-artifact@master
         with:
-          name: python-3.14-docs-pdf-a4.tar.bz2
-          path: ./Doc/dist/python-3.14.0rc3-docs-pdf-a4.tar.bz2
+          name: python-${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2
+          path: ./Doc/dist/python-${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2
