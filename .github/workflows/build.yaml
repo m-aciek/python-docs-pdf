@@ -66,14 +66,18 @@ jobs:
               cp ./Doc/build/html/404.html "$target"
             fi
           done
-      - name: Commit and push 404.html placeholders
+      - name: Commit 404.html placeholders
         run: |
           cd gh-pages
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add 3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.zip 3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.tar.bz2 || true
           git commit -m "Add 404.html placeholders for missing PDF archives for ${{ steps.majorminor.outputs.major_minor }}" || true
-          git push origin gh-pages
+      - name: Push commit
+        uses: ad-m/github-push-action@master
+        with:
+          branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
   build:
     runs-on: ubuntu-latest
     steps:
@@ -132,11 +136,15 @@ jobs:
           mkdir -p gh-pages/3
           cp ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.zip gh-pages/3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.zip
           cp ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2 gh-pages/3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.tar.bz2
-      - name: Commit and push generated archives
+      - name: Commit generated archives
         run: |
           cd gh-pages
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add 3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.zip 3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.tar.bz2
           git commit -m "Update PDF archives for ${{ steps.majorminor.outputs.major_minor }}"
-          git push origin gh-pages
+      - name: Push commit
+        uses: ad-m/github-push-action@master
+        with:
+          branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
