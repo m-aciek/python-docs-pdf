@@ -5,6 +5,8 @@ on:
         description: 'Tag from CPython repository'
         required: true
         default: 'v3.13.7'
+permissions:
+  contents: write
 jobs:
   inform:
     runs-on: ubuntu-latest
