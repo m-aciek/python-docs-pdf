@@ -80,6 +80,7 @@ jobs:
         with:
           branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: gh-pages
   build:
     runs-on: ubuntu-latest
     steps:
@@ -150,3 +151,4 @@ jobs:
         with:
           branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: gh-pages
