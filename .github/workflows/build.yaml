@@ -44,6 +44,36 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           path: ./Doc/build/html/404.html
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+      - name: Set major_minor variable
+        id: majorminor
+        run: |
+          input_tag="${{ github.event.inputs.tag }}"
+          major_minor=$(echo "$input_tag" | grep -oE '^[vV]([0-9]+\.[0-9]+)')
+          major_minor=${major_minor#v}
+          echo "major_minor=$major_minor" >> $GITHUB_OUTPUT
+      - name: Check and copy 404.html as zip/tar.bz2 if not exist
+        run: |
+          set -e
+          mkdir -p gh-pages/3
+          for ext in zip tar.bz2; do
+            target="gh-pages/3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.$ext"
+            if [ ! -f "$target" ]; then
+              cp ./Doc/build/html/404.html "$target"
+            fi
+          done
+      - name: Commit and push 404.html placeholders
+        run: |
+          cd gh-pages
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add 3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.zip 3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.tar.bz2 || true
+          git commit -m "Add 404.html placeholders for missing PDF archives for ${{ steps.majorminor.outputs.major_minor }}" || true
+          git push origin gh-pages
   build:
     runs-on: ubuntu-latest
     steps:
@@ -85,3 +115,28 @@ jobs:
         with:
           name: python-${{ steps.tag-no-v.outputs.tag_no_v }}-docs-pdf-a4.tar.bz2
           path: ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+      - name: Set major_minor variable
+        id: majorminor
+        run: |
+          input_tag="${{ github.event.inputs.tag }}"
+          major_minor=$(echo "$input_tag" | grep -oE '^[vV]([0-9]+\.[0-9]+)')
+          major_minor=${major_minor#v}
+          echo "major_minor=$major_minor" >> $GITHUB_OUTPUT
+      - name: Copy generated archives to gh-pages
+        run: |
+          mkdir -p gh-pages/3
+          cp ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.zip gh-pages/3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.zip
+          cp ./Doc/dist/${{ github.event.inputs.tag }}-docs-pdf-a4.tar.bz2 gh-pages/3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.tar.bz2
+      - name: Commit and push generated archives
+        run: |
+          cd gh-pages
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add 3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.zip 3/python-${{ steps.majorminor.outputs.major_minor }}-docs-pdf-a4.tar.bz2
+          git commit -m "Update PDF archives for ${{ steps.majorminor.outputs.major_minor }}"
+          git push origin gh-pages
