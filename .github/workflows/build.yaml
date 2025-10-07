@@ -17,7 +17,7 @@ jobs:
           major_minor=$(echo "$input_tag" | grep -oE '^v[0-9]+\.[0-9]+')
           latest_patch=$(git ls-remote --tags https://github.com/python/cpython.git | \
             awk '{print $2}' | grep -E "refs/tags/${major_minor}\\.([0-9]+([abrc][0-9]+)?)$" | \
-            sed 's|refs/tags/||' | sort -V | tail -n1)
+            sed 's|refs/tags/||' | sort -V -k1,1 -k1.1,1.1d | awk 'BEGIN{stable="";beta=""} /b[0-9]+$/{beta=$0} /^[^b]+$/{stable=$0} END{if(stable!=""){print stable}else{print beta}}')
           if [ "$input_tag" != "$latest_patch" ]; then
             echo "Provided tag $input_tag is not the latest patch for $major_minor (latest: $latest_patch)." >&2
             exit 1
@@ -90,7 +90,7 @@ jobs:
           major_minor=$(echo "$input_tag" | grep -oE '^v[0-9]+\.[0-9]+')
           latest_patch=$(git ls-remote --tags https://github.com/python/cpython.git | \
             awk '{print $2}' | grep -E "refs/tags/${major_minor}\\.([0-9]+([abrc][0-9]+)?)$" | \
-            sed 's|refs/tags/||' | sort -V | tail -n1)
+            sed 's|refs/tags/||' | sort -V -k1,1 -k1.1,1.1d | awk 'BEGIN{stable="";beta=""} /b[0-9]+$/{beta=$0} /^[^b]+$/{stable=$0} END{if(stable!=""){print stable}else{print beta}}')
           if [ "$input_tag" != "$latest_patch" ]; then
             echo "Provided tag $input_tag is not the latest patch for $major_minor (latest: $latest_patch)." >&2
             exit 1
