@@ -86,6 +86,9 @@ jobs:
     # once via actions/deploy-pages, eliminating concurrent gh-pages push conflicts.
     needs: build
     if: ${{ always() && !cancelled() && needs.build.result != 'skipped' && github.event_name != 'push' }}
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
     runs-on: ubuntu-latest
     environment:
       name: github-pages

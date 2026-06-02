@@ -515,6 +515,9 @@ jobs:
   publish:
     needs: [prepare, build-html, build-text, build-texinfo, build-epub, build-pdf]
     if: ${{ !cancelled() && inputs.publish }}
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
     runs-on: ubuntu-latest
     environment:
       name: github-pages
