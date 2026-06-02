@@ -73,6 +73,9 @@ jobs:
     # deploy job below collects all artifacts and publishes once, avoiding
     # concurrent git pushes/commit conflicts to gh-pages.
     uses: ./.github/workflows/build.yaml
+    permissions:  # unused but required by GH Actions
+      pages: write
+      id-token: write
     with:
       reference: ${{ matrix.branch }}
       python_version: ${{ matrix.python_version }}
